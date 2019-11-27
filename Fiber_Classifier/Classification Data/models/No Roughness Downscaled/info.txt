@@ -1,0 +1,4 @@
+batch_size=1, epochs=50, trained with 21 features, excluding all downscaled roughness features
+
+training accuracy: 90.68%
+validation accuracy: 74.12%

@@ -1,0 +1,142 @@
+These next 2 work together
+"""
+def saveResultsToExcel2(modes, kernel_lower_range, kernel_upper_range, functions):
+    sheets = []
+    modes = ['overflow','absolute value', 'squaring']
+    title = createTitle(functions, len(getImageAndName()[1][0])-1)
+    print(title)
+    
+    for kernel_distance in range(kernel_lower_range, kernel_upper_range):
+        for mode in modes:
+            sheet = []
+            sheet.append(runFeatureExtractors2(kernel_distance, mode, functions))
+            sheet.append('KD = ' + str(kernel_distance) + ', Mode = ' + mode)
+            sheets.append(sheet)
+        
+    writeToExcel(title, sheets, 'Extracted Features with Abs, Squaring, Overflow.xls')
+
+
+
+
+def runFeatureExtractors2(kernel_distance, mode, functions):
+    images, names = getImageAndName('Images\\Fiber Images\\')
+    longest = max(len(row) for row in names)
+    
+    sheet = []
+    for image, name in zip(images, names):
+        row = []
+        print(name)
+        row.append(name + (longest-len(name))*[])
+        roughness_value, roughness_image, mask = getRoughnessValue(image, kernel_distance, mode)
+        
+        row.append(roughness_value)
+        for func in functions:
+            row.append(list(func(image, mask)))
+        
+        row = [val for sublist in row for val in sublist]
+        sheet.append(row)
+
+    for row in sheet:
+        print(row)
+        
+    return sheet
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#this is from when getRoughnessValues was first written
+
+"""
+    # Store the masked image and its roughness into the list results
+    t_start = time.time()
+    results = []
+    for img in images:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        roughness_value, roughness_image, mask = getRoughnessValue(img, method='square')
+        imshow(mask)
+
+        img = cv2.bitwise_and(img, img, mask=mask)
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        cv2.putText(img, 'R=' + str(round(roughness_value, 3)), (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0),
+                    lineType=cv2.LINE_AA)
+        pair = [roughness_value, img]
+        results.append(pair)
+        print(str(time.time() - t_start))
+
+    # save the images in the folder TestResults, with the roughness as part of its name
+    for pair in results:
+        cv2.imwrite('Test Results/R- ' + str(pair[0]) + '.png', pair[1])
+        print(str(pair[0]))
+        imshow(pair[1])
+"""
+
+
+"""
+def savePicturesOfRoughnessAndMaskingAlgorithm():
+    names, images, masks, backgrounds = getNamesImagesMasksBackgrounds('Images\\Fiber Images\\')
+
+    names2 = []
+    roughness_images = []
+    masked_images = []
+
+    for i in range(len(images)):
+        name = names[i]
+        img = images[i]
+        name = os.path.splitext(name[len(name) - 1])[0]
+        print(name)
+        names2.append(name)
+
+        roughness_value, roughness_image, mask = getRoughnessValue(img)
+
+        img = cv2.bitwise_and(img, img, mask=mask)
+        roughness_images.append(roughness_image)
+        masked_images.append(img)
+
+        img_pil = Image.fromarray(img)
+        img_pil.show()
+
+
+    for i in range(len(masked_images)):
+        masked_image = masked_images[i]
+        name = names2[i]
+        cv2.imwrite('Images\\Test Results\\' + name + '- Masked Image.png', masked_image)
+"""
+
+
+"""
+# Create the top row of the excel file, describes the contents of the file
+# Input is the list of functions being called and the depth of the files being scanned
+def createTitle(functions, name_length):
+    title = ['Name'] + [''] * name_length + ['Roughness']
+
+    for function in functions:
+        print(function.__name__)
+        if function.__name__ is 'getRoughnessValue':
+            title.append('Roughness')
+        if function.__name__ is 'getOpacityAndColor':
+            title.append('Opacity')
+            title.append('Blue')
+            title.append('Green')
+            title.append('Red')
+        if function.__name__ is 'getNumberOfCorners':
+            title.append('Corner Count')
+            title.append('Corner Proportion')
+        else:
+            title.append('Something else')
+        title.append('Time')
+    return title
+
+"""
