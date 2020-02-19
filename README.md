@@ -1,6 +1,6 @@
 # Fiber_Classifier
 
-This program uses microscopic images of fibers to accurately classify the material composition, and is progarmmed entirely in Python.
+This Python program uses microscopic images of fibers to accurately classify the material composition.
 
 It includes a pre-trained model that can classify among nine different types of fibers, as well as the necessary tools to analyze labeled images and create new models.
 
