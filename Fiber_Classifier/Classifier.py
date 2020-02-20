@@ -142,7 +142,7 @@ def makePrediction(model_name, excel_file):
 
 def Main(folder):
     results_directory = '\\'.join(os.getcwd().split('\\') + ['Results'])
-    # results_directory = copyDataOver(folder)
+    results_directory = copyDataOver(folder)
     imageSplitter(results_directory, mask_minimum_percent=0.05, mask_maximum_percent=0.35)
     toggleFeaturesAndParameters([results_directory], ['Sheet 1'], excel_name=results_directory+'\\Extraction Results.xls', toggle_roughness=True, toggle_roughness2=True,
                                 toggle_roughness_scaled=False, toggled_roughness2_scaled=False, toggle_opacity_and_colors=True,
